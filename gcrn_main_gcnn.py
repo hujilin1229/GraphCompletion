@@ -12,39 +12,40 @@ config = None
 
 def main(_):
 
-    for rm in [0.5, 0.6, 0.7, 0.8]:
-        for ds_ind in range(5):
-            config.data_rm = rm
-            config.ds_ind = ds_ind
-            # Directory generating.. for saving
-            prepare_dirs(config)
-            prepare_config_date(config, config.ds_ind)
-            # Random seed settings
-            rng = np.random.RandomState(config.random_seed)
-            tf.set_random_seed(config.random_seed)
+    # for rm in [0.5, 0.6, 0.7, 0.8]:
+    #     for ds_ind in range(5):
+    #         config.data_rm = rm
+    #         config.ds_ind = ds_ind
+    # Directory generating.. for saving
+    prepare_dirs(config)
+    prepare_config_date(config, config.ds_ind)
+    # Random seed settings
+    rng = np.random.RandomState(config.random_seed)
+    tf.set_random_seed(config.random_seed)
 
-            # Model training
-            trainer = Trainer(config, rng)
-            save_config(config.model_dir, config)
-            config.load_path = config.model_dir
-            if config.is_train:
-                trainer.train(save=True)
-                result_dict = trainer.test()
-            else:
-                if not config.load_path:
-                    raise Exception(
-                        "[!] You should specify `load_path` to "
-                        "load a pretrained model")
-                result_dict = trainer.test()
-            save_results(config.result_dir, result_dict)
-            accept_rate = evaluate_result(result_dict, method='KS-test', alpha=0.1)
-            kl_div = evaluate_result(result_dict, method='KL')
-            wasser_dis = evaluate_result(result_dict, method='wasser')
-            sig_test = evaluate_result(result_dict, method='sig_test')
-            print("The accept rate of KS test is ", accept_rate)
-            print("The final KL div is ", kl_div)
-            print("The wasser distance is ", wasser_dis)
-            print("The AR of Sign Test is ", sig_test)
+    # Model training
+    trainer = Trainer(config, rng)
+    save_config(config.model_dir, config)
+    config.load_path = config.model_dir
+    if config.is_train:
+        trainer.train(save=True)
+        result_dict = trainer.test()
+    else:
+        if not config.load_path:
+            raise Exception(
+                "[!] You should specify `load_path` to "
+                "load a pretrained model")
+        result_dict = trainer.test()
+    save_results(config.result_dir, result_dict)
+    accept_rate = evaluate_result(result_dict, method='KS-test', alpha=0.1)
+    kl_div = evaluate_result(result_dict, method='KL')
+    wasser_dis = evaluate_result(result_dict, method='wasser')
+    sig_test = evaluate_result(result_dict, method='sig_test')
+    print("The accept rate of KS test is ", accept_rate)
+    print("The final KL div is ", kl_div)
+    print("The wasser distance is ", wasser_dis)
+    print("The AR of Sign Test is ", sig_test)
+
 
 if __name__ == "__main__":
     config, unparsed = get_config()
@@ -52,6 +53,9 @@ if __name__ == "__main__":
     config.target = 'hist'
     config.classif_loss = 'kl'
     config.hist_range = list(range(0, 41, 5))
+
+    config.data_rm = 0.5
+    config.ds_ind = 0
 
     # optimal params for kl 1e-3
     config.server_name = 'server_kdd'
