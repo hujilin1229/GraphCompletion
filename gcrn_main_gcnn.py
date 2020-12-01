@@ -12,10 +12,6 @@ config = None
 
 def main(_):
 
-    # for rm in [0.5, 0.6, 0.7, 0.8]:
-    #     for ds_ind in range(5):
-    #         config.data_rm = rm
-    #         config.ds_ind = ds_ind
     # Directory generating.. for saving
     prepare_dirs(config)
     prepare_config_date(config, config.ds_ind)
