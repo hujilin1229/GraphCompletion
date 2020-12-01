@@ -254,20 +254,6 @@ def weighted_kl_div(y_true, y_pred,
 
     return avg_kl_div, std_kl_div
 
-def weighted_js_div(y_true, y_pred, epsilon=EPSILON):
-    y_true = y_true + epsilon
-    y_pred = y_pred + epsilon
-
-    y_true = 1./(1+epsilon) * y_true
-    y_pred = 1./(1+epsilon) * y_pred
-    mean = 0.5*(y_true + y_pred)
-
-    jsd = 0.5*cal_kl_div(y_true, mean) + 0.5*cal_kl_div(y_pred, mean)
-    jsd = 1 - jsd
-    avg_kl_div = np.nanmean(jsd)
-    std_kl_div = np.std(jsd)
-
-    return avg_kl_div, std_kl_div
 
 def weighted_kl_div_true(y_true, y_pred, epsilon=1e-3):
     log_op = np.log(y_true + epsilon) - np.log(y_pred + epsilon)
