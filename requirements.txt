@@ -7,7 +7,7 @@ flask_migrate==2.5.3
 flask_serialize==1.4.0
 geopy==1.23.0
 networkx==2.1
-numpy==1.16.6
+numpy==1.22.0
 pandas==0.20.3
 pyemd==0.5.1
 scikit_learn==0.23.2
